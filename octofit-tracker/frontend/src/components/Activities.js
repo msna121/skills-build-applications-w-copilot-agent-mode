@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-// Define the codespace Django REST API endpoint suffix for Activities
-const ACTIVITIES_API_URL = 'https://legendary-orbit-959wqj5xrp9fpqx6-8000.app.github.dev/api/activity/';
-
 function Activities() {
   const [activities, setActivities] = useState([]);
 
   useEffect(() => {
-    fetch(ACTIVITIES_API_URL)
+    const baseUrl = 'https://legendary-orbit-959wqj5xrp9fpqx6-8000.app.github.dev/';
+    const endpoint = 'api/activity/';
+    const apiUrl = baseUrl + endpoint;
+
+    fetch(apiUrl)
       .then(response => response.json())
       .then(data => setActivities(data))
       .catch(error => console.error('Error fetching activities:', error));
