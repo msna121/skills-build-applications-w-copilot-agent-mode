@@ -4,6 +4,7 @@ function Activities() {
   const [activities, setActivities] = useState([]);
 
   useEffect(() => {
+    // Fetching activities data from the backend API using the codespace URL with the /api/activity/ endpoint
     fetch('https://legendary-orbit-959wqj5xrp9fpqx6-8000.app.github.dev/api/activity/')
       .then(response => response.json())
       .then(data => setActivities(data))
