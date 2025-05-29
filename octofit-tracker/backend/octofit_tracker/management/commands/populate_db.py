@@ -1,66 +1,101 @@
 from django.core.management.base import BaseCommand
 from octofit_tracker.models import User, Team, Activity, Leaderboard, Workout
 from django.utils import timezone
+from datetime import timedelta
 
 class Command(BaseCommand):
-    help = 'Populate the database with test data'
+    help = 'Populate the database with test data for OctoFit Tracker'
 
     def handle(self, *args, **kwargs):
-        self.stdout.write('Creating test data...')
+        self.stdout.write('Creating test data for OctoFit Tracker...')
 
-        # Create test users
+        # Clear existing data
+        User.objects.all().delete()
+        Team.objects.all().delete()
+        Activity.objects.all().delete()
+        Leaderboard.objects.all().delete()
+        Workout.objects.all().delete()
+
+        # Create test users (students)
         users_data = [
-            {'email': 'john.doe@school.edu', 'name': 'John Doe', 'password': 'password123'},
-            {'email': 'jane.smith@school.edu', 'name': 'Jane Smith', 'password': 'password123'},
-            {'email': 'bob.wilson@school.edu', 'name': 'Bob Wilson', 'password': 'password123'},
+            {'email': 'mona.smith@mergington.edu', 'name': 'Mona Smith', 'password': 'secure123'},
+            {'email': 'peter.parker@mergington.edu', 'name': 'Peter Parker', 'password': 'secure123'},
+            {'email': 'diana.prince@mergington.edu', 'name': 'Diana Prince', 'password': 'secure123'},
+            {'email': 'bruce.wayne@mergington.edu', 'name': 'Bruce Wayne', 'password': 'secure123'},
+            {'email': 'clark.kent@mergington.edu', 'name': 'Clark Kent', 'password': 'secure123'},
+            {'email': 'natasha.rogers@mergington.edu', 'name': 'Natasha Rogers', 'password': 'secure123'},
         ]
 
         users = []
         for user_data in users_data:
-            user, created = User.objects.get_or_create(**user_data)
+            user = User.objects.create(**user_data)
             users.append(user)
             self.stdout.write(f'Created user: {user.name}')
 
-        # Create test teams
+        # Create teams with themes
         teams_data = [
-            {'name': 'Team Alpha'},
-            {'name': 'Team Beta'},
+            {'name': 'Mergington Marathoners'},
+            {'name': 'Fitness Phoenixes'},
+            {'name': 'Wellness Warriors'},
         ]
 
+        teams = []
         for i, team_data in enumerate(teams_data):
-            team, created = Team.objects.get_or_create(**team_data)
-            # Add members to teams
-            if i == 0:
-                team.members.add(users[0], users[1])
-            else:
-                team.members.add(users[1], users[2])
+            team = Team.objects.create(**team_data)
+            # Distribute users across teams (2 users per team)
+            team.members.add(users[i*2], users[i*2 + 1])
+            teams.append(team)
             self.stdout.write(f'Created team: {team.name}')
 
-        # Create test activities
-        activities_data = [
-            {'user': users[0], 'type': 'Running', 'duration': 30, 'date': timezone.now()},
-            {'user': users[1], 'type': 'Swimming', 'duration': 45, 'date': timezone.now()},
-            {'user': users[2], 'type': 'Cycling', 'duration': 60, 'date': timezone.now()},
-        ]
-
-        for activity_data in activities_data:
-            activity, created = Activity.objects.get_or_create(**activity_data)
-            self.stdout.write(f'Created activity: {activity.type} by {activity.user.name}')
-
-        # Create test leaderboard entries
+        # Create varied activities over past week
+        activity_types = ['Running', 'Swimming', 'Cycling', 'Basketball', 'Yoga', 'Weight Training']
+        now = timezone.now()
+        
         for user in users:
-            leaderboard, created = Leaderboard.objects.get_or_create(user=user, defaults={'points': 100})
-            self.stdout.write(f'Created leaderboard entry for: {leaderboard.user.name}')
+            # Create 3-5 activities per user over the last week
+            for _ in range(3):
+                days_ago = timezone.timedelta(days=_)
+                activity_data = {
+                    'user': user,
+                    'type': activity_types[_ % len(activity_types)],
+                    'duration': 30 + (_ * 15),  # Varying durations
+                    'date': now - days_ago
+                }
+                activity = Activity.objects.create(**activity_data)
+                self.stdout.write(f'Created activity: {activity.type} by {activity.user.name}')
 
-        # Create test workouts
+        # Create leaderboard with varying points
+        for i, user in enumerate(users):
+            points = 100 + (i * 25)  # Varying points for different users
+            leaderboard = Leaderboard.objects.create(user=user, points=points)
+            self.stdout.write(f'Created leaderboard entry for {user.name} with {points} points')
+
+        # Create sample workouts
         workouts_data = [
-            {'name': 'Morning Cardio', 'description': '30 minutes of running'},
-            {'name': 'Strength Training', 'description': '45 minutes of weight lifting'},
-            {'name': 'HIIT Workout', 'description': '20 minutes of high-intensity interval training'},
+            {
+                'name': 'Morning Energy Boost',
+                'description': '30-minute cardio routine: 10 min jogging, 10 min jumping jacks, 10 min high knees'
+            },
+            {
+                'name': 'Strength Builder',
+                'description': '45-minute routine: pushups, squats, lunges, planks'
+            },
+            {
+                'name': 'Flexibility Focus',
+                'description': '30-minute yoga and stretching routine'
+            },
+            {
+                'name': 'Team Sports Mix',
+                'description': '60-minute mixed sports activities: basketball, volleyball'
+            },
+            {
+                'name': 'Endurance Challenge',
+                'description': '40-minute circuit training with cardio intervals'
+            }
         ]
 
         for workout_data in workouts_data:
-            workout, created = Workout.objects.get_or_create(**workout_data)
+            workout = Workout.objects.create(**workout_data)
             self.stdout.write(f'Created workout: {workout.name}')
 
-        self.stdout.write(self.style.SUCCESS('Successfully populated the database with test data'))
+        self.stdout.write(self.style.SUCCESS('Successfully populated the OctoFit Tracker database with test data'))
