@@ -1,0 +1,84 @@
+.App {
+  text-align: center;
+  background-color: #f8f9fa; /* Light grey background */
+  color: #333; /* Dark grey text */
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Custom styles for Bootstrap components */
+.navbar {
+  background-color: #e9ecef !important; /* Light grey background for navbar */
+}
+
+.navbar-brand {
+  color: #007bff !important; /* Blue color for brand link */
+}
+
+.nav-link {
+  color: #007bff !important; /* Blue color for nav links */
+}
+
+.nav-link:hover {
+  color: #0056b3 !important; /* Darker blue on hover */
+}
+
+h2 {
+  color: #007bff; /* Blue color for headings */
+}
+
+.table {
+  background-color: #ffffff; /* White background for tables */
+}
+
+.table th {
+  background-color: #007bff; /* Blue background for table headers */
+  color: white; /* White text for table headers */
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 123, 255, 0.05); /* Light blue stripe */
+}
+
+.btn-primary {
+  background-color: #007bff; /* Blue background for primary buttons */
+  border-color: #007bff; /* Blue border for primary buttons */
+}
+
+.btn-primary:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  border-color: #004085; /* Even darker blue on hover */
+}
