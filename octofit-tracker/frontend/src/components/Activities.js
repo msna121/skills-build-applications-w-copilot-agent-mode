@@ -4,8 +4,11 @@ function Activities() {
   const [activities, setActivities] = useState([]);
 
   useEffect(() => {
-    // Fetching activities data from the backend API using the codespace URL with the /api/activity/ endpoint
-    fetch('https://legendary-orbit-959wqj5xrp9fpqx6-8000.app.github.dev/api/activity/')
+    const baseUrl = 'https://legendary-orbit-959wqj5xrp9fpqx6-8000.app.github.dev/api/';
+    const endpoint = 'activity/';
+    const apiUrl = baseUrl + endpoint;
+
+    fetch(apiUrl)
       .then(response => response.json())
       .then(data => setActivities(data))
       .catch(error => console.error('Error fetching activities:', error));
