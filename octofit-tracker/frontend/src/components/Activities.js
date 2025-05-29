@@ -5,7 +5,7 @@ function Activities() {
 
   useEffect(() => {
     // Adding the codespace Django REST API endpoint suffix to Activities.js using Copilot agent mode
-    fetch('https://[REPLACE-THIS-WITH-YOUR-CODESPACE-NAME]-8000.app.github.dev/api/activity/')
+    fetch('https://legendary-orbit-959wqj5xrp9fpqx6-8000.app.github.dev/api/activity/')
       .then(response => response.json())
       .then(data => setActivities(data))
       .catch(error => console.error('Error fetching activities:', error));
