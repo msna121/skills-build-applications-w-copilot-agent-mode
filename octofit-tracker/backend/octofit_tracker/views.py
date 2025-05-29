@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from .models import User, Team, Activity, Leaderboard, Workout
 from .serializers import UserSerializer, TeamSerializer, ActivitySerializer, LeaderboardSerializer, WorkoutSerializer
 
@@ -28,12 +28,16 @@ class WorkoutViewSet(viewsets.ModelViewSet):
 
 
 # API root for discoverability
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def api_root(request, format=None):
+    if request.method == 'POST':
+        return Response({"message": "POST request received"}, status=status.HTTP_201_CREATED)
+
+    base_url = 'https://legendary-orbit-959wqj5xrp9fpqx6-8000.app.github.dev/'
     return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'teams': reverse('team-list', request=request, format=format),
-        'activity': reverse('activity-list', request=request, format=format),
-        'leaderboard': reverse('leaderboard-list', request=request, format=format),
-        'workouts': reverse('workout-list', request=request, format=format),
+        'users': f'{base_url}api/users/?format=api',
+        'teams': f'{base_url}api/teams/?format=api',
+        'activities': f'{base_url}api/activities/?format=api',
+        'leaderboard': f'{base_url}api/leaderboard/?format=api',
+        'workouts': f'{base_url}api/workouts/?format=api'
     })
